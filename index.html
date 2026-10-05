@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xx机械设备有限公司</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .page {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            /* background-color: green; */
+        }
+        /* =========== 导航栏 =========== */
+        header {
+            width: 100%;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.35);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            color: white;
+        }
+
+        header.active {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .h-content {
+            max-width: 1300px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav li {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav a:hover {
+            color: #ff6900;
+        }
+
+        /* 新增：当前页面高亮样式 */
+        .nav a.active {
+            color: #ff6900; /* 跟悬浮一样的橙色，你也可以换成其他颜色 */
+            font-weight: bold; /* 加粗一点，视觉更明显 */
+        }
+
+        .logo {
+            /* 核心：最小 16px，最大 30px，中间随视口宽度 2.5vw 动态变化 */
+            font-size: clamp(16px, 2.5vw, 30px); 
+            font-weight: bold;
+        }
+
+        /* ================= 导航栏移动端适配 ================= */
+        
+        /* 默认（桌面端）：隐藏汉堡按钮 */
+        .menu-toggle {
+            display: none; /* 桌面端隐藏 */
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            transition: 0.3s;
+        }
+
+        /* =========== 首页大图 =========== */
+        .content {
+            width: 100%;
+            height: 80vh;
+            background-color: #1a1a1a; /* 深色底，防止图片加载时白屏 */
+        }
+        /* 公司宣传图 */
+        .content img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 铺满，边缘可能裁切，但大屏比例接近，裁切不多 */
+            object-position: center;
+            display: block;         /* 消除底部默认空隙 */
+        }
+        /* =========== 产品中心 =========== */
+        .product-section {
+            background-color: #1a1a1a;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 60px 20px 100px 20px;
+            color: #fff;
+        }
+        .product-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        /* 轮播图容器 */
+        .product-card {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;   /* 关键：等比 */
+            max-height: 80vh; 
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        /* 轮播图片:相对定位 */
+        /* 轮播图外层链接:相对定位（用于控制淡入淡出） */
+        .photo-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0; /* 默认隐藏 */
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1;
+            display: block;
+            background-color: #1a1a1a;
+        }
+        /* 显示当前的图片 */
+        .photo-wrapper.active {
+            opacity: 1;
+            z-index: 2;
+        }
+        /* 轮播图片（保留原有的图片样式） */
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 完整显示图片，不裁剪 */
+            display: block;
+        }
+        /* 显示图片 */
+        .photo.active {
+            opacity: 1;
+            z-index: 2;
+        }
+        /* 左右按钮 */
+        .btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.4); /* 半透明黑底 */
+            color: #fff;
+            cursor: pointer;
+            transition: opacity 0.5s ease;
+            z-index: 10;
+            /* 大小随屏幕变化，最小 36px，最大 64px */
+            width: clamp(36px, 5vw, 64px);
+            height: clamp(36px, 5vw, 64px);
+            font-size: clamp(14px, 2vw, 24px);
+        }
+        .btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            color: #ff6900;
+        }
+        .btn.left {
+            left: clamp(8px, 2vw, 20px);
+        }
+
+        .btn.right {
+            right: clamp(8px, 2vw, 20px);
+        }
+        /* 轮播图指示器 */
+        .product-line {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .line {
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .line.active {
+            background-color: #ff6900;
+        }
+        /* =========== 页脚整体 =========== */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 60px 20px 30px 20px;
+            position: relative;
+            border-top: 3px solid #d32f2f;
+        }
+        /* 内容限制最大宽度并居中 */
+        .footer-box {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        /* 三列信息区 */
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        /* 每一列内部：图标在左，文字在右 */
+        .footer-item {
+            display: flex;
+            align-items: flex-start;  /* 顶部对齐，防止文字多行时错位 */
+            gap: 15px;
+        }
+        /* 图标圆圈样式（模拟截图里的圆形图标） */
+        .footer-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid #555; /* 灰色圆环 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0; /* 防止图标被压缩 */
+            color: #ccc;
+        }
+        /* 图标里的 SVG 尺寸 */
+        .footer-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* 文字信息 */
+        .footer-text h4 {
+            font-size: 14px;
+            font-weight: normal;
+            color: #999;        /* 标题灰色 */
+            margin-bottom: 5px;
+        }
+
+        .footer-text p {
+            font-size: 15px;
+            color: #ddd;        /* 内容浅灰 */
+            line-height: 1.5;
+        }
+        /* 分隔线 */
+        .footer-line {
+            border: 0;
+            border-top: 1px solid #333; /* 极细的灰线 */
+            margin-bottom: 30px;
+        }
+
+        /* 底部版权区 */
+        .footer-bottom {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            line-height: 1.8;
+        }
+
+        /* 返回顶部按钮（红色方块） */
+        .back-to-top {
+            position: fixed;      /* 固定在屏幕右下角 */
+            right: 30px;
+            bottom: 30px;
+            width: 40px;
+            height: 40px;
+            background-color: #d32f2f;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 1000;
+            transition: background 0.3s;
+            display: none;
+        }
+        .back-to-top:hover {
+            background-color: #b71c1c;
+        }
+        .back-to-top.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* =========== 关于我们 =========== */
+        .about-section {
+            background-color: #ffffff; /* 白色背景 */
+            padding: 80px 20px;
+            color: #333;
+        }
+
+        .about-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            display: flex;
+            gap: 60px; /* 左右两栏的间距 */
+            align-items: center; /* 垂直居中对齐 */
+        }
+
+        /* 右侧文字区 */
+        .about-text {
+            flex: 1; /* 占 1 份宽度 */
+        }
+
+        .about-title {
+            font-size: 36px;
+            color: #ff6900; /* 主题橙色 */
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .about-subtitle {
+            font-size: 16px;
+            color: #999;
+            font-weight: normal;
+            letter-spacing: 2px; /* 字母间距，显得更大气 */
+            margin-bottom: 25px;
+            text-transform: uppercase; /* 自动大写 */
+        }
+
+        .about-text p {
+            font-size: 16px;       /* 字体稍微加大，提升可读性 */
+            color: #444;           /* 深灰色，比纯黑柔和 */
+            line-height: 1.9;      /* 行高增加到 1.9，段落更透气 */
+            margin-bottom: 24px;   /* 段落间距加大 */
+            text-align: justify;   /* 两端对齐 */
+            text-indent: 2em;      /* 中文首行缩进两字符 */
+        }
+
+        /* 查看更多按钮（假链接，样式为空心胶囊） */
+        .about-btn {
+            display: inline-block;
+            padding: 10px 30px;
+            border: 1px solid #ff6900; /* 橙色边框 */
+            color: #ff6900; /* 橙色文字 */
+            border-radius: 50px; /* 胶囊形状 */
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .about-btn:hover {
+            background-color: #ff6900; /* 鼠标悬浮填充橙色 */
+            color: #fff;
+        }
+
+        /* 左侧图片区 */
+        .about-image {
+            flex: 1; /* 占 1 份宽度，与文字等宽 */
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 轻微阴影，增加质感 */
+        }
+
+        /* =========== 新闻资讯 =========== */
+        .news-section {
+            background-color: #1a1a1a; /* 深色背景，与产品中心呼应 */
+            padding: 80px 20px;
+            color: #fff;
+        }
+
+        .news-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .news-title {
+            font-size: 32px;
+            text-align: center;
+            color: #ff6900; /* 橙色主题色 */
+            margin-bottom: 8px;
+        }
+
+        .news-subtitle {
+            font-size: 14px;
+            text-align: center;
+            color: #888;
+            letter-spacing: 2px;
+            margin-bottom: 50px;
+        }
+
+        /* 4列网格 */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 大屏4列 */
+            gap: 20px;
+        }
+
+        /* 卡片 */
+        .news-card {
+            background-color: #252525; /* 比背景稍浅的深色 */
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+            /* 新增：消除 <a> 标签自带的默认样式 */
+            text-decoration: none; 
+            color: inherit;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px); /* 鼠标悬浮卡片上浮 */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 卡片图片 */
+        .news-img {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .news-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 裁切填满，保证图片整齐 */
+            transition: transform 0.5s;
+        }
+
+        .news-card:hover .news-img img {
+            transform: scale(1.05); /* 鼠标悬浮图片微微放大 */
+        }
+
+        /* 卡片文字区 */
+        .news-info {
+            padding: 20px;
+            flex: 1; /* 撑满剩余高度，确保卡片底部对齐 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-info h3 {
+            font-size: 16px;
+            color: #fff;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            /* 限制标题最多显示两行，超出省略 */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-date {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .news-info p {
+            font-size: 13px;
+            color: #aaa;
+            line-height: 1.6;
+            /* 限制摘要最多显示三行，超出省略 */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: auto; /* 如果没有内容，自动推到最下方 */
+        }
+
+        /* 查看更多按钮 */
+        .news-more {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .more-btn {
+            display: inline-block;
+            padding: 12px 40px;
+            border: 1px solid #ff6900;
+            color: #ff6900;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .more-btn:hover {
+            background-color: #ff6900;
+            color: #fff;
+        }
+
+        /* ================= 移动端适配 ================= */
+        /* 使用两个断点，实现平板2列，手机1列 */
+        @media (max-width: 1024px) {
+            .news-grid {
+                grid-template-columns: repeat(2, 1fr); /* 平板变成2列 */
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* 显示汉堡按钮 */
+            .menu-toggle {
+                display: flex;
+            }
+            
+            /* 隐藏原来的横向导航，改成绝对定位的下拉菜单 */
+            .nav {
+                position: absolute;
+                top: 80px; /* 顶部导航栏的高度 */
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.95); /* 深色背景，防止透出页面内容 */
+                flex-direction: column; /* 竖向排列 */
+                gap: 0;
+                padding: 0;
+                
+                /* 初始状态隐藏 */
+                max-height: 0; 
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+
+                z-index: 998; /* 新增：确保下拉菜单层级足够高 */
+            }
+            
+            /* 展开状态 */
+            .nav.active {
+                max-height: 400px; /* 足够容纳所有菜单项的高度 */
+                border-bottom: 1px solid #444;
+            }
+
+            .nav li {
+                width: 100%;
+                text-align: center;
+                border-top: 1px solid #333; /* 给菜单项加分割线 */
+            }
+
+            .nav a {
+                display: block;
+                padding: 15px 0; /* 增加点击区域 */
+            }
+
+            /* 汉堡按钮变成“X”的效果（可选，提升体验） */
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 6px);
+            }
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -6px);
+            }
+
+            /* 首页大图适配 */
+            /* 小屏时，放弃强行占满高度，改为由图片自身撑开 */
+            .content {
+                height: auto; 
+            }
+            
+            /* 小屏时，图片整体缩小，完整显示，绝不裁剪 */
+            .content img {
+                height: auto;        /* 高度按宽度比例自动缩放 */
+                object-fit: contain; /* 完整显示整张图，没有残图 */
+            }
+
+            /* 页脚适配 */
+            .footer-top {
+                grid-template-columns: 1fr; /* 手机端变成一列，上下排列 */
+                gap: 30px;
+            }
+            .footer {
+                padding: 40px 20px 20px 20px;
+            }
+            /* 关于我们适配 */
+            .about-content {
+                flex-direction: column; /* 手机端变成上下堆叠 */
+                gap: 40px;
+            }
+            .about-image {
+                order: -1; /* 手机端让图片排在文字上方，先看图再看字，符合浏览习惯 */
+                width: 100%;
+            }
+            .about-section {
+                padding: 60px 20px;
+            }
+            .about-title {
+                font-size: 28px;
+            }
+             /* 新闻资讯手机端适配 */
+            .news-grid {
+                grid-template-columns: 1fr; /* 手机端变成1列 */
+            }
+            .news-section {
+                padding: 60px 20px;
+            }
+            .news-title {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- 导航栏 -->
+        <header>
+            <div class="h-content">
+                <h1 class="logo">xx机械设备有限公司</h1>
+                <!-- 汉堡按钮，仅在移动端显示 -->
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <!-- 电脑端导航栏 -->
+                <ul class="nav" id="navMenu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="product.html">产品中心</a></li>
+                    <li><a href="news.html">新闻资讯</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </header>
+        <!-- 首页大图 -->
+        <div class="content">
+            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1920&auto=format&fit=crop" alt="工业厂房">
+        </div>
+                
+        <!-- 产品中心 -->
+        <section class="product-section">
+            <h2 class="product-title">产品中心</h2>
+            <div class="product-card">
+                <!-- 左右按键 -->
+                <button class="btn left">&lt;</button>
+                <button class="btn right">&gt;</button>
+                
+                <!-- 轮播图图片（6张，链接分别指向详情页） -->
+                <a href="product-img1.html" class="photo-wrapper active">
+                    <img class="photo" src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop" alt="设备图片1">
+                </a>
+                <a href="product-img2.html" class="photo-wrapper">
+                    <img class="photo" src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=600&auto=format&fit=crop" alt="设备图片2">
+                </a>
+                <a href="product-img3.html" class="photo-wrapper">
+                    <img class="photo" src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=600&auto=format&fit=crop" alt="设备图片3">
+                </a>
+                <a href="product-img4.html" class="photo-wrapper">
+                    <img class="photo" src="https://img01.71360.com/file/read/www/M00/EA/7E/wKj0iWGwRumAT0BjAAD3b7EjBFk854.jpg" alt="设备图片4">
+                </a>
+                <a href="product-img5.html" class="photo-wrapper">
+                    <img class="photo" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop" alt="设备图片5">
+                </a>
+                <a href="product-img6.html" class="photo-wrapper">
+                    <img class="photo" src="https://ts1.tc.mm.bing.net/th/id/R-C.4492a5df5301ccb80c996ae8bc7a646e?rik=LMx53jVZzMzQJg&riu=http%3a%2f%2fwww.sdzyzgjx.com%2fupfile%2fimages%2f2022%2f10%2f28%2f16669225783659894.jpg&ehk=Byd%2bRJhAgXVfgdq9Joa6UDe1lw358Eld120h2W4Upic%3d&risl=&pid=ImgRaw&r=0" alt="设备图片6">
+                </a>
+
+                <!-- 轮播图指示器（从4个增加至6个） -->
+                <div class="product-line">
+                    <span class="line active" data-index="0"></span>
+                    <span class="line" data-index="1"></span>
+                    <span class="line" data-index="2"></span>
+                    <span class="line" data-index="3"></span>
+                    <span class="line" data-index="4"></span>
+                    <span class="line" data-index="5"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我们 -->
+        <section class="about-section">
+            <div class="about-container">
+                <div class="about-content">
+
+                    <!-- 左侧：公司图片 -->
+                    <div class="about-image">
+                        <img src="https://ts3.tc.mm.bing.net/th/id/OIP-C.qP8xGOv-YIe9sXp3Kb7yMwHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="公司前台">
+                    </div>
+                    
+                    <!-- 右侧：文字内容 -->
+                    <div class="about-text">
+                        <h2 class="about-title">关于我们</h2>
+                        
+                        <p>苏州xx机械设备有限公司2019年初与日本山一建立合作伙伴关系，在安徽建立精密磨削工具生产基地，工厂坐落于安徽省的将军县六安市金寨县。工厂成立以来始终专注于精密磨削工具制造。依托日本山一制作所近50年来的技术沉淀，公司引入日本山一制作所先进的砂轮生产技术，所生产的砂轮产品精度高、耐磨性好、性能稳定，广泛用于玻璃、陶瓷、蓝宝石、碳化硅等脆硬材料的高精度、高品质加工。</p>
+                        
+                        <p>公司注重新产品新技术的研发，建立了完善的研发体系，已与中南大学粉末冶金行业专家李云平教授建立了紧密的产学研合作，共同开发高性能的砂轮结合剂材料和生产工艺。 公司具有严格的生产管理制度，配备了齐全的生产和检测设备，严格管控产品品质。本着精益求精，不断创新的理念，发扬工匠精神，认真做好每一件产品......</p>
+                        
+                        <!-- 查看更多 -->
+                        <a href="about.html" class="about-btn">查看更多 +</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 新闻资讯 -->
+        <section class="news-section">
+            <div class="news-container">
+                <!-- 标题区 -->
+                <h2 class="news-title">新闻资讯</h2>
+                <p class="news-subtitle">INFORMATION</p>
+                
+                <!-- 新闻卡片网格 -->
+                <div class="news-grid">
+                    
+                    <!-- 卡片1 -->
+                    <a href="news-detail1.html" class="news-card">
+                        <div class="news-img">
+                            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop" alt="新闻1">
+                        </div>
+                        <div class="news-info">
+                            <h3>国产高精尖砂轮——中国制造引领世界...</h3>
+                            <span class="news-date">📅 2025-01-02</span>
+                            <p>国新办近期举行新闻发布会，国家统计局副局长盛来运介绍2024年一季度国民经济运行情况...</p>
+                        </div>
+                    </a>
+
+                    <!-- 卡片2 -->
+                    <a href="news-detail2.html" class="news-card">
+                        <div class="news-img">
+                            <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=600&auto=format&fit=crop" alt="新闻2">
+                        </div>
+                        <div class="news-info">
+                            <h3>超声振动辅助磨削与磁力抛光的复合加...</h3>
+                            <span class="news-date">📅 2024-12-20</span>
+                            <p>一种超声振动辅助磨削与磁力抛光的复合加工系统及其方法，其超声振动使得金刚石砂轮...</p>
+                        </div>
+                    </a>
+
+                    <!-- 卡片3 -->
+                    <a href="news-detail3.html" class="news-card">
+                        <div class="news-img">
+                            <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=600&auto=format&fit=crop" alt="砂轮制作工艺">
+                        </div>
+                        <div class="news-info">
+                            <h3>砂轮的制作工艺流程？</h3>
+                            <span class="news-date">📅 2024-10-08</span>
+                            <p>砂轮是磨削加工中最主要的一类磨具。砂轮是在磨料中加入结合剂，经压坯、干燥和焙烧而制成的...</p>
+                        </div>
+                    </a>
+
+                    <!-- 卡片4 -->
+                    <a href="news-detail4.html" class="news-card">
+                        <div class="news-img">
+                            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop" alt="新闻4">
+                        </div>
+                        <div class="news-info">
+                            <h3>公司参加2024年国际机械展会回顾</h3>
+                            <span class="news-date">📅 2024-09-15</span>
+                            <p>本次展会汇聚了来自全球的顶尖机械设备制造商，我司展出的新型数控设备吸引了众多客户...</p>
+                        </div>
+                    </a>
+
+                </div>
+
+                <!-- 查看更多按钮 -->
+                <div class="news-more">
+                    <a href="news.html" class="more-btn">查看更多</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚区域:联系我们 -->
+        <footer class="footer">
+            <div class="footer-box">
+
+                <!-- 第一部分：三列信息 -->
+                <div class="footer-top">
+
+                    <!-- 第一列：电话 -->
+                    <div class="footer-item">
+                        <div class="footer-icon">
+                            <!-- 电话图标 SVG -->
+                            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        </div>
+                        <div class="footer-text">
+                            <h4>联系电话：</h4>
+                            <p>0512-65800126</p>
+                        </div>
+                    </div>
+
+                    <!-- 第二列：邮箱 -->
+                    <div class="footer-item">
+                        <div class="footer-icon">
+                            <!-- 信封图标 SVG -->
+                            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        </div>
+                        <div class="footer-text">
+                            <h4>邮箱：</h4>
+                            <p>wangchangjun@szchangcai.com</p>
+                        </div>
+                    </div>
+
+                    <!-- 第三列：地址 -->
+                    <div class="footer-item">
+                        <div class="footer-icon">
+                            <!-- 定位图标 SVG -->
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </div>
+                        <div class="footer-text">
+                            <h4>公司地址：</h4>
+                            <p>中国(江苏)自由贸易试验区苏州片区苏州工业园区九江路2号9幢2楼</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 第二部分：分隔线 -->
+                <hr class="footer-line">
+
+                <!-- 第三部分：版权信息 -->
+                <div class="footer-bottom">
+                    <p>© 2026 徐州xx机械设备有限公司 版权所有</p>
+                    <p> 苏ICP备2026xxxxxx号-x</p>
+                </div>
+
+            </div>
+        </footer>
+
+        <!-- 返回顶部按钮 -->
+        <button class="back-to-top">↑</button>
+
+    </div>
+    <script>
+        // 导航栏滚动变色
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('active', window.scrollY > 5);
+        })
+
+        // 产品中心轮播图
+        const photos = document.querySelectorAll('.photo-wrapper');
+        const left = document.querySelector('.left');
+        const right = document.querySelector('.right');
+        const lines = document.querySelectorAll('.line');
+        let current = 0;
+
+        // 切换图片函数
+        function showPhoto(n) {
+
+            // 循环边界处理
+            if (n < 0 ) n = photos.length - 1;
+            if (n >= photos.length) n = 0;
+
+            // 移除所有图片的 active 类
+            photos.forEach(photo => {
+                photo.classList.remove('active');
+            });
+            // 给当前图片添加 active 类
+            photos[n].classList.add('active');
+
+            // 移除所有指示器的 active 类
+            lines.forEach(line => {
+                line.classList.remove('active');
+            });
+            // 给当前指示器添加 active 类
+            lines[n].classList.add('active');
+            // 更新当前图片索引
+            current = n;
+        }
+
+        // 左右按钮点击事件
+        left.addEventListener('click', () => {
+            showPhoto(current - 1);
+        })
+        right.addEventListener('click', () => {
+            showPhoto(current + 1);
+        })
+
+        // 轮播图指示器点击事件
+        lines.forEach(line => {
+            line.addEventListener('click', () => {
+                showPhoto(parseInt(line.dataset.index));
+            })
+        })
+
+        // 键盘左右方向键支持
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') showPhoto(current - 1);
+            if (e.key === 'ArrowRight') showPhoto(current + 1);
+        });
+
+        // 返回顶部按钮
+        const backToTop = document.querySelector('.back-to-top');
+
+        backToTop.addEventListener('click', function () {
+            document.documentElement.scrollTop = 0
+        })
+        window.addEventListener('scroll', function () {
+            if (document.documentElement.scrollTop > 30) {
+                backToTop.classList.add('active')
+            } else {
+                backToTop.classList.remove('active')
+            }
+        })
+
+        // 导航栏移动端汉堡菜单交互
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener('click', () => {
+                // 切换菜单的展开/收起
+                navMenu.classList.toggle('active');
+                // 让汉堡按钮变成 X
+                menuToggle.classList.toggle('active');
+            });
+            
+            // 点击菜单里的链接后，自动收起菜单
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                });
+            });
+
+            // ================= 导航栏当前页面高亮（支持子页面自动归类） =================
+            (function() {
+                // 1. 获取当前页面的文件名，如果为空，则默认为 index.html
+                let currentPage = window.location.pathname.split('/').pop().toLowerCase();
+                if (currentPage === '' || currentPage === undefined) {
+                    currentPage = 'index.html';
+                }
+
+                // 2. 获取所有导航链接
+                const navLinks = document.querySelectorAll('.nav a');
+
+                // 3. 遍历比对
+                navLinks.forEach(link => {
+                    const linkHref = link.getAttribute('href');
+                    const linkBase = linkHref.replace('.html', ''); // 拿到 "product"、"news" 这些关键词
+
+                    // 情况一：完全匹配（比如 index.html 和 index.html）
+                    if (linkHref === currentPage) {
+                        link.classList.add('active');
+                        return;
+                    }
+
+                    // 情况二：首页特殊处理
+                    if ((currentPage === 'index.html' || currentPage === './') && linkHref === 'index.html') {
+                        link.classList.add('active');
+                        return;
+                    }
+
+                    // 情况三：子页面归类（如 product-img1.html 包含 product，就点亮产品中心）
+                    if (linkBase !== 'index' && linkBase !== '' && currentPage.includes(linkBase)) {
+                        link.classList.add('active');
+                    }
+                });
+            })();
+
+        }
+    </script>
+</body>
+</html>

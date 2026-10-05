@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+
+        .page-about {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* =========== 导航栏 =========== */
+        header {
+            width: 100%;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        header.active {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .h-content {
+            max-width: 1300px;
+            height: 80px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav li {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav a:hover {
+            color: #ff6900;
+        }
+
+        .nav a.active {
+            color: #ff6900;
+            font-weight: bold;
+        }
+
+        .logo {
+            /* 核心：最小 16px，最大 30px，中间随视口宽度 2.5vw 动态变化 */
+            font-size: clamp(16px, 2.5vw, 30px); 
+            font-weight: bold;
+        }
+
+        /* 桌面端隐藏汉堡按钮 */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            transition: 0.3s;
+        }
+
+        /* =========== 关于我们 =========== */
+        .about-section {
+            background-color: #ffffff;
+            padding: 120px 20px 80px 20px; /* 顶部给导航栏留出空间 */
+        }
+
+        .about-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-title {
+            font-size: 36px;
+            color: #ff6900;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .about-text p {
+            font-size: 16px;       /* 字体稍微加大，提升可读性 */
+            color: #444;           /* 深灰色，比纯黑柔和 */
+            line-height: 1.9;      /* 行高增加到 1.9，段落更透气 */
+            margin-bottom: 24px;   /* 段落间距加大 */
+            text-align: justify;   /* 两端对齐 */
+            text-indent: 2em;      /* 中文首行缩进两字符 */
+        }
+
+        .about-image {
+            flex: 1;
+        }
+
+        .about-image img {
+            width: 100%;
+            max-width: 100%;       /* 图片响应式 */
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        /* =========== 数据展示 =========== */
+        .stats-section {
+            background-color: #f9f9f9;
+            padding: 60px 20px;
+        }
+
+        .stats-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-num {
+            font-size: 52px;
+            font-weight: bold;
+            color: #c00000;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* =========== 我们的资质（居中展示） =========== */
+        .cert-section {
+            padding: 80px 20px;
+            background-color: #ffffff;
+            text-align: center; /* 让标题和图片居中 */
+        }
+
+        .cert-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .cert-title {
+            font-size: 32px;
+            color: #ff6900;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+
+        .cert-img-box {
+            max-width: 1200px; /* 限制图片最大宽度，防止在宽屏上过大 */
+            margin: 0 auto;   /* 水平居中 */
+        }
+
+        .cert-img-box img {
+            width: 100%;
+            height: auto;    /* 保持比例 */
+            display: block;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* 轻微阴影，提升质感 */
+        }
+
+        /* =========== 页脚 =========== */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 60px 20px 30px 20px;
+            position: relative;
+            border-top: 3px solid #d32f2f;
+        }
+
+        .footer-box {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .footer-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            color: #ccc;
+        }
+
+        .footer-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .footer-text h4 {
+            font-size: 14px;
+            font-weight: normal;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .footer-text p {
+            font-size: 15px;
+            color: #ddd;
+            line-height: 1.5;
+        }
+
+        .footer-line {
+            border: 0;
+            border-top: 1px solid #333;
+            margin-bottom: 30px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            line-height: 1.8;
+        }
+
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 40px;
+            height: 40px;
+            background-color: #d32f2f;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 1000;
+            transition: background 0.3s;
+            display: none;
+        }
+
+        .back-to-top:hover {
+            background-color: #b71c1c;
+        }
+
+        .back-to-top.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ================= 移动端适配 ================= */
+        @media (max-width: 768px) {
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav {
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                gap: 0;
+                padding: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                z-index: 998;
+            }
+
+            .nav.active {
+                max-height: 400px;
+                border-bottom: 1px solid #444;
+            }
+
+            .nav li {
+                width: 100%;
+                text-align: center;
+                border-top: 1px solid #333;
+            }
+
+            .nav a {
+                display: block;
+                padding: 15px 0;
+            }
+
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 6px);
+            }
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -6px);
+            }
+
+            /* 关于我们 */
+            .about-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            .about-image {
+                order: -1;
+                width: 100%;
+            }
+            .about-section {
+                padding: 100px 20px 60px 20px;
+            }
+            .about-title {
+                font-size: 28px;
+            }
+            .about-text p {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+
+            /* 数据展示 */
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px 20px;
+            }
+            .stat-num {
+                font-size: 36px;
+            }
+            .stat-label {
+                font-size: 14px;
+            }
+
+            /* 资质 */
+            .cert-section {
+                padding: 60px 20px;
+            }
+            .cert-title {
+                font-size: 26px;
+                margin-bottom: 30px;
+            }
+
+            /* 页脚 */
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .footer {
+                padding: 40px 20px 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-about">
+        <!-- 导航栏 -->
+        <header>
+            <div class="h-content">
+                <h1 class="logo">xx机械设备有限公司</h1>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav" id="navMenu">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="product.html">产品中心</a></li>
+                    <li><a href="news.html">新闻资讯</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- 关于我们 -->
+        <section class="about-section">
+            <div class="about-container">
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="https://ts3.tc.mm.bing.net/th/id/OIP-C.qP8xGOv-YIe9sXp3Kb7yMwHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="公司前台">
+                    </div>
+                    <div class="about-text">
+                        <h2 class="about-title">公司介绍</h2>
+                        <p>苏州xx机械设备有限公司2019年初与日本山一建立合作伙伴关系，在安徽建立精密磨削工具生产基地，工厂坐落于安徽省的将军县六安市金寨县。工厂成立以来始终专注于精密磨削工具制造。依托日本山一制作所近50年来的技术沉淀，公司引入日本山一制作所先进的砂轮生产技术，所生产的砂轮产品精度高、耐磨性好、性能稳定，广泛用于玻璃、陶瓷、蓝宝石、碳化硅等脆硬材料的高精度、高品质加工。</p>
+                        <p>公司注重新产品新技术的研发，建立了完善的研发体系，已与中南大学粉末冶金行业专家李云平教授建立了紧密的产学研合作，共同开发高性能的砂轮结合剂材料和生产工艺。 公司具有严格的生产管理制度，配备了齐全的生产和检测设备，严格管控产品品质。本着精益求精，不断创新的理念，发扬工匠精神，认真做好每一件产品，以优良的产品性能和专业的技术服务，成为BOE，富士康，比亚迪等客户的合作伙伴，得到了客户的认可。</p>
+                        <p>我们一直专注于工业温度控制领域，具备雄厚的研发储备资源和丰富的实践经验，是目前国内专一生产温度控制设备和提供温度系统解决方案的企业之一。我们主要产品有：油循环温度控制机、水循环温度控制机、冰水机、油加热器、水加热器。产品广泛应用于挤出机，橡胶、轮胎制造、化工、压铸、纺织、印刷、皮革制造、吹瓶机、汽车、通讯、电子、光学、医药等众多行业。并和众多的机械主机厂配套，提升生产线的产量和质量，为客户在激烈的行业竞争中提升竞争力。我公司并服务于液晶显示加工行业，有专业的人员服务，主营产品：LCD切割刀轮、研磨头、抛光研磨带，及其各类设备耗材。公司秉承着“诚信、专业、优质、快捷”的经营理念，真诚专业地为客户提供高品质、高效能的专业产品及售后服务和技术资源，竭力为客户创造无限的价值。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 数据展示 -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-num">30+</div>
+                    <div class="stat-label">产品种类</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">50+</div>
+                    <div class="stat-label">国家专利</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">80%+</div>
+                    <div class="stat-label">创新研发占有率</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">50%+</div>
+                    <div class="stat-label">河北市场占有率</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 我们的资质 -->
+        <section class="cert-section">
+            <div class="cert-container">
+                <h2 class="cert-title">我们的资质</h2>
+                <div class="cert-img-box">
+                    <img src="https://www.zhijianjx.com/wp-content/uploads/2025/09/pasted-image-20260903-085652-906.jpg" alt="公司资质证书展示">
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚区域:联系我们 -->
+        <footer class="footer">
+            <div class="footer-box">
+                <div class="footer-top">
+                    <div class="footer-item">
+                        <div class="footer-icon">
+                            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        </div>
+                        <div class="footer-text">
+                            <h4>联系电话：</h4>
+                            <p>0512-65800126</p>
+                        </div>
+                    </div>
+                    <div class="footer-item">
+                        <div class="footer-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        </div>
+                        <div class="footer-text">
+                            <h4>邮箱：</h4>
+                            <p>wangchangjun@szchangcai.com</p>
+                        </div>
+                    </div>
+                    <div class="footer-item">
+                        <div class="footer-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </div>
+                        <div class="footer-text">
+                            <h4>公司地址：</h4>
+                            <p>中国(江苏)自由贸易试验区苏州片区苏州工业园区九江路2号9幢2楼</p>
+                        </div>
+                    </div>
+                </div>
+                <hr class="footer-line">
+                <div class="footer-bottom">
+                    <p>© 2026 徐州xx机械设备有限公司 版权所有</p>
+                    <p> 苏ICP备2026xxxxxx号-x</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- 返回顶部按钮 -->
+        <button class="back-to-top">↑</button>
+    </div>
+
+    <script>
+        // 导航栏滚动变色
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('active', window.scrollY > 5);
+        })
+
+        // 返回顶部按钮
+        const backToTop = document.querySelector('.back-to-top');
+
+        backToTop.addEventListener('click', function () {
+            document.documentElement.scrollTop = 0
+        })
+        window.addEventListener('scroll', function () {
+            if (document.documentElement.scrollTop > 30) {
+                backToTop.classList.add('active')
+            } else {
+                backToTop.classList.remove('active')
+            }
+        })
+        
+        // 导航栏移动端汉堡菜单交互
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            });
+            
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                });
+            });
+
+            // ================= 导航栏当前页面高亮（支持子页面自动归类） =================
+            (function() {
+                // 1. 获取当前页面的文件名，如果为空，则默认为 index.html
+                let currentPage = window.location.pathname.split('/').pop().toLowerCase();
+                if (currentPage === '' || currentPage === undefined) {
+                    currentPage = 'index.html';
+                }
+
+                // 2. 获取所有导航链接
+                const navLinks = document.querySelectorAll('.nav a');
+
+                // 3. 遍历比对
+                navLinks.forEach(link => {
+                    const linkHref = link.getAttribute('href');
+                    const linkBase = linkHref.replace('.html', ''); // 拿到 "product"、"news" 这些关键词
+
+                    // 情况一：完全匹配（比如 index.html 和 index.html）
+                    if (linkHref === currentPage) {
+                        link.classList.add('active');
+                        return;
+                    }
+
+                    // 情况二：首页特殊处理
+                    if ((currentPage === 'index.html' || currentPage === './') && linkHref === 'index.html') {
+                        link.classList.add('active');
+                        return;
+                    }
+
+                    // 情况三：子页面归类（如 product-img1.html 包含 product，就点亮产品中心）
+                    if (linkBase !== 'index' && linkBase !== '' && currentPage.includes(linkBase)) {
+                        link.classList.add('active');
+                    }
+                });
+            })();
+        }
+    </script>
+</body>
+</html>
