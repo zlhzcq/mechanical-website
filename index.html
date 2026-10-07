@@ -169,14 +169,18 @@
             background: rgba(0, 0, 0, 0.4); /* 半透明黑底 */
             color: #fff;
             cursor: pointer;
-            transition: opacity 0.5s ease;
+            /* 修改这里：加上颜色过渡 */
+            transition: opacity 0.5s ease, background 0.3s, color 0.3s;
+            /* 加上去除焦点黑框 */
+            outline: none;
             z-index: 10;
             /* 大小随屏幕变化，最小 36px，最大 64px */
             width: clamp(36px, 5vw, 64px);
             height: clamp(36px, 5vw, 64px);
             font-size: clamp(14px, 2vw, 24px);
         }
-        .btn:hover {
+        .btn:hover,
+        .btn:active{
             background: rgba(0, 0, 0, 0.8);
             color: #ff6900;
         }
@@ -622,6 +626,31 @@
             .news-title {
                 font-size: 26px;
             }
+
+            /* 1. 手机端横线变短 */
+            .line {
+                width: 15px; /* 从40px缩短为15px */
+            }
+            .product-line {
+                gap: 6px; /* 间距也稍微缩小一点 */
+            }
+
+            /* 2. 手机端按钮点击变色后自动恢复原色 */
+            /* 强制手机端的悬停状态恢复为原色，避免手指松开后颜色卡住 */
+            .btn:hover {
+                background: rgba(0, 0, 0, 0.4);
+                color: #fff;
+            }
+            /* 仅保留按下瞬间变色，手指松开就触发上面的 hover 恢复原色 */
+            .btn:active {
+                background: rgba(0, 0, 0, 0.8);
+                color: #ff6900;
+            }
+
+            /* 隐藏左右按钮 */
+            .btn {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -904,6 +933,38 @@
             if (e.key === 'ArrowLeft') showPhoto(current - 1);
             if (e.key === 'ArrowRight') showPhoto(current + 1);
         });
+
+        // ================= 移动端手指滑动切换轮播图 =================
+        const productCard = document.querySelector('.product-card');
+        let startX = 0;
+        let endX = 0;
+
+        if (productCard) {
+            // 1. 记录手指按下的起始位置
+            productCard.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            }, { passive: true }); // passive: true 保证页面正常上下滑动
+
+            // 2. 记录手指松开的位置，并计算滑动距离
+            productCard.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                handleSwipe();
+            }, { passive: true });
+        }
+
+        // 3. 判断滑动方向并切换图片
+        function handleSwipe() {
+            const diff = startX - endX;
+            const threshold = 50; // 滑动距离超过 50 像素才算有效滑动，防止误触
+
+            if (diff > threshold) {
+                // 手指向左滑（查看下一张）
+                showPhoto(current + 1);
+            } else if (diff < -threshold) {
+                // 手指向右滑（查看上一张）
+                showPhoto(current - 1);
+            }
+        }
 
         // 返回顶部按钮
         const backToTop = document.querySelector('.back-to-top');
