@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三仓磁吸上料机构</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        .page-wrapper{position:relative;width:100%;min-height:100vh}
+        .product-detail-main{background-color:#f5f5f5;min-height:100vh}
+        .detail-container{max-width:1200px;margin:0 auto;padding:0 20px}
+        .detail-top{background-color:#fff;padding:140px 0 60px;border-bottom:1px solid #eee}
+        .detail-top .detail-container{display:flex;gap:60px;align-items:center}
+        .detail-image{flex:1}
+        .detail-image img{width:100%;height:auto;display:block;border-radius:6px;box-shadow:0 4px 15px rgba(0,0,0,.05)}
+        .detail-info{flex:1}
+        .detail-title{font-size:28px;color:#333;margin-bottom:30px;font-weight:bold}
+        .detail-subtitle{font-size:20px;color:#c00000;margin-bottom:20px}
+        .advantage-list{list-style:none}
+        .advantage-list li{font-size:16px;color:#555;line-height:2.2;padding-left:5px}
+        .detail-bottom{background-color:#f5f5f5;padding:40px 0 80px}
+        .detail-tabs{display:flex;gap:5px;margin-bottom:20px;border-bottom:1px solid #ddd}
+        .tab-btn{display:inline-block;padding:12px 30px;background-color:#e0e0e0;color:#666;font-size:15px;cursor:pointer;transition:all .3s}
+        .tab-btn.active{background-color:#333;color:#fff}
+        .tab-btn:hover:not(.active){background-color:#d0d0d0}
+        .param-table{width:100%;border-collapse:collapse;background-color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+        .param-table thead th{background-color:#333;color:#fff;text-align:left;padding:18px 25px;font-size:16px;font-weight:normal}
+        .param-table tbody tr{border-bottom:1px solid #f0f0f0}
+        .param-table tbody tr:nth-child(even){background-color:#fafafa}
+        .param-table td{padding:16px 25px;font-size:15px;color:#444}
+        .param-table td:first-child{color:#666}
+        @media(max-width:768px){
+            .detail-top{padding:110px 0 40px}
+            .detail-top .detail-container{flex-direction:column;gap:30px}
+            .detail-title{font-size:22px;margin-bottom:20px}
+            .detail-subtitle{font-size:18px}
+            .advantage-list li{font-size:14px;line-height:1.8}
+            .param-table thead th,.param-table td{padding:12px 15px;font-size:14px}
+            .tab-btn{padding:10px 20px;font-size:14px}
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="product-detail-main">
+            <div class="detail-top">
+                <div class="detail-container">
+                    <div class="detail-image"><img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=600&auto=format&fit=crop" alt="三仓磁吸上料机构"></div>
+                    <div class="detail-info">
+                        <h1 class="detail-title">三仓磁吸上料机构</h1>
+                        <h3 class="detail-subtitle">产品优势</h3>
+                        <ul class="advantage-list">
+                            <li>1、该机构采用二级链条输送，便于成捆棒材铺平展开</li>
+                            <li>2、多级齿形板上设有调节板，可以根据棒材直径调整齿形板间距</li>
+                            <li>3、PLC控制系统，上料根数计数准确</li>
+                            <li>4、可使不同直径钢筋按根顺序上料</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-bottom">
+                <div class="detail-container">
+                    <div class="detail-tabs"><span class="tab-btn active" data-target="param">产品参数</span></div>
+                    <div class="tab-content active" id="param">
+                        <table class="param-table">
+                            <thead><tr><th width="30%">项目</th><th width="70%">参数</th></tr></thead>
+                            <tbody>
+                                <tr><td>设备型号</td><td>HBGT-5T型</td></tr>
+                                <tr><td>钢筋上料直径范围</td><td>Φ12~Φ40mm</td></tr>
+                                <tr><td>平台宽度</td><td>2500MM</td></tr>
+                                <tr><td>平台高度</td><td>可定制</td></tr>
+                                <tr><td>控制方式</td><td>遥控按钮</td></tr>
+                                <tr><td>上料频率</td><td>每分钟20次（可调）</td></tr>
+                                <tr><td>操作人数</td><td>1人</td></tr>
+                                <tr><td>装机总功率</td><td>9KW</td></tr>
+                                <tr><td>设备总重</td><td>约4.5吨</td></tr>
+                                <tr><td>承重范围</td><td>5吨</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="hf.js"></script>
+</body>
+</html>

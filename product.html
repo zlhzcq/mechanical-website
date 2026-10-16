@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品中心</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        .page-wrapper{position:relative;width:100%;min-height:100vh}
+        .product-main{background-color:#f9f9f9;min-height:100vh}
+        .product-banner{background-color:#1a1a1a;color:#fff;text-align:center;padding:140px 20px 60px}
+        .product-banner h1{font-size:36px;margin-bottom:10px;letter-spacing:2px}
+        .product-banner p{font-size:14px;color:#888;letter-spacing:4px;text-transform:uppercase}
+        .product-container{max-width:1300px;margin:0 auto;padding:60px 20px 100px}
+        .category-section{margin-bottom:70px}
+        .category-section:last-child{margin-bottom:0}
+        .category-title{font-size:24px;color:#333;padding-left:15px;border-left:4px solid #ff6900;margin-bottom:20px;position:relative}
+        .category-title::after{content:"";position:absolute;left:0;bottom:-10px;width:100%;height:1px;background-color:#ddd}
+        .product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:30px}
+        .product-card{background-color:#fff;border:1px solid #eee;border-radius:6px;overflow:hidden;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column;align-items:center;padding-bottom:20px}
+        .product-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,.08)}
+        .product-card img{width:100%;height:240px;object-fit:cover;display:block;background-color:#f1f1f1}
+        .product-card h3{font-size:16px;color:#333;margin:20px 0 15px;text-align:center;padding:0 10px;line-height:1.5}
+        .detail-btn{display:inline-block;padding:8px 25px;background-color:#333;color:#fff;text-decoration:none;font-size:14px;border-radius:4px;transition:background .3s}
+        .detail-btn:hover{background-color:#ff6900}
+        @media(max-width:1024px){.product-grid{grid-template-columns:repeat(2,1fr);gap:20px}}
+        @media(max-width:768px){
+            .product-banner{padding:120px 20px 40px}
+            .product-banner h1{font-size:28px}
+            .product-banner p{font-size:12px}
+            .product-grid{grid-template-columns:1fr;gap:20px}
+            .category-title{font-size:20px}
+            .product-card img{height:200px}
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="product-main">
+            <div class="product-banner"><h1>产品中心</h1><p>PRODUCT CENTER</p></div>
+            <div class="product-container">
+                <section class="category-section">
+                    <h2 class="category-title">钢筋自动上料机构</h2>
+                    <div class="product-grid">
+                        <div class="product-card"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop" alt="智能钢筋阶梯上料机构"><h3>智能钢筋阶梯上料机构</h3><a href="product-img1.html" class="detail-btn">详细信息 →</a></div>
+                        <div class="product-card"><img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=600&auto=format&fit=crop" alt="振颤摇摆平台机构"><h3>振颤摇摆平台机构</h3><a href="product-img2.html" class="detail-btn">详细信息 →</a></div>
+                        <div class="product-card"><img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?q=80&w=600&auto=format&fit=crop" alt="三仓磁吸上料机构"><h3>三仓磁吸上料机构</h3><a href="product-img3.html" class="detail-btn">详细信息 →</a></div>
+                    </div>
+                </section>
+                <section class="category-section">
+                    <h2 class="category-title">盘圆小料加工设备</h2>
+                    <div class="product-grid">
+                        <div class="product-card"><img src="https://img01.71360.com/file/read/www/M00/EA/7E/wKj0iWGwRumAT0BjAAD3b7EjBFk854.jpg" alt="数控钢筋弯箍机"><h3>数控钢筋弯箍机</h3><a href="product-img4.html" class="detail-btn">详细信息 →</a></div>
+                        <div class="product-card"><img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop" alt="智能钢筋调直弯箍一体机"><h3>智能钢筋调直弯箍一体机</h3><a href="product-img5.html" class="detail-btn">详细信息 →</a></div>
+                        <div class="product-card"><img src="https://ts1.tc.mm.bing.net/th/id/R-C.4492a5df5301ccb80c996ae8bc7a646e?rik=LMx53jVZzMzQJg&riu=http%3a%2f%2fwww.sdzyzgjx.com%2fupfile%2fimages%2f2022%2f10%2f28%2f16669225783659894.jpg&ehk=Byd%2bRJhAgXVfgdq9Joa6UDe1lw358Eld120h2W4Upic%3d&risl=&pid=ImgRaw&r=0" alt="智能钢筋切断生产线"><h3>智能钢筋切断生产线</h3><a href="product-img6.html" class="detail-btn">详细信息 →</a></div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="hf.js"></script>
+</body>
+</html>

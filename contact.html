@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我们</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        .page-about{position:relative;width:100%;min-height:100vh}
+        .contact-main{background-color:#fff;min-height:100vh}
+        .contact-banner{width:100%;height:300px;background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1920&auto=format&fit=crop');background-size:cover;background-position:center;position:relative;margin-top:80px}
+        .banner-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.2)}
+        .contact-container{max-width:1300px;margin:0 auto;padding:80px 20px 100px}
+        .contact-header{text-align:center;margin-bottom:80px}
+        .contact-header h1{font-size:36px;color:#ff4500;margin-bottom:10px;font-weight:bold}
+        .contact-header p{font-size:16px;color:#888;letter-spacing:2px;text-transform:capitalize}
+        .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:50px;text-align:center}
+        .contact-item{display:flex;flex-direction:column;align-items:center}
+        .icon-circle{width:100px;height:100px;background-color:#ff6900;border-radius:50%;display:flex;justify-content:center;align-items:center;margin-bottom:25px;box-shadow:0 0 0 15px rgba(255,105,0,.1);transition:transform .3s,box-shadow .3s}
+        .contact-item:hover .icon-circle{transform:scale(1.05);box-shadow:0 0 0 20px rgba(255,105,0,.2)}
+        .icon-circle svg{width:45px;height:45px;fill:#fff}
+        .contact-item h3{font-size:20px;color:#333;margin-bottom:15px}
+        .contact-item p{font-size:15px;color:#666;line-height:1.6;word-break:break-all}
+        @media(max-width:768px){
+            .contact-banner{height:200px;margin-top:80px}
+            .contact-container{padding:60px 20px}
+            .contact-header{margin-bottom:50px}
+            .contact-header h1{font-size:28px}
+            .contact-grid{grid-template-columns:1fr;gap:50px}
+            .icon-circle{width:80px;height:80px;box-shadow:0 0 0 10px rgba(255,105,0,.1)}
+            .icon-circle svg{width:35px;height:35px}
+            .contact-item h3{font-size:18px}
+            .contact-item p{font-size:14px}
+        }
+    </style>
+</head>
+<body>
+    <div class="page-about">
+        <main class="contact-main">
+            <div class="contact-banner"><div class="banner-overlay"></div></div>
+            <div class="contact-container">
+                <div class="contact-header"><h1>联系我们</h1><p>Contact Us</p></div>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+                        <h3>电话</h3><p>0512-65800126</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+                        <h3>Email</h3><p>wangchangjun@szchangcai.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+                        <h3>地址</h3><p>中国(江苏)自由贸易试验区苏州片区苏州工业园区九江路2号9幢2楼</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="hf.js"></script>
+</body>
+</html>
